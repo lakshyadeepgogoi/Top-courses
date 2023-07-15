@@ -5,28 +5,33 @@ const Cards = ({courses}) => {
 
     let allCourses= [];
 
+    if (!courses) {
+      return <div>No courses available</div>;
+    } 
 
     //returns you a list of all courses recieved from the api response
     const getCourses = () => {
 
-        Object.values(courses).forEach( (courseCategory) => {
-            courseCategory.forEach( (course) => {
-                allCourses.push(course);
-            })
-        } )
-        return allCourses;
+        if (!courses) {
+          return <div>No courses available</div>;
+        } else {
+          Object.values(courses).forEach((courseCategory) => {
+            courseCategory.forEach((course) => {
+              allCourses.push(course);
+            });
+          });
+          return allCourses;
+        }
     }
 
 
   return (
     <div>
-        {
-        getCourses().map( (course) => {
-            <Card/>
-        })
-        }
+      {getCourses().map((courses) => (
+        <Card />
+      ))}
     </div>
-  )
+  );
 }
 
 export default Cards

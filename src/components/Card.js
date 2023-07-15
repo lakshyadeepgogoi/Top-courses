@@ -4,7 +4,7 @@ const Card = () => {
     return(
         <div>
             <div>
-                <img></img>
+                <img alt="course thumbnail"></img>
             </div>
         </div>
     )
