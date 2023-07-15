@@ -1,44 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { apiUrl,filterData } from "./data";
 import Navbar from "./components/Navbar";
+import Cards from "./components/Cards";
 import Filter from "./components/Filter";
-import Cards from "./components/Cards"
+import { apiUrl, filterData } from "./data";
 import { toast } from "react-toastify";
+import Spinner from "./components/Spinner";
+import { Toast } from "react-toastify";
 
 const App = () => {
-
   const [courses, setCourses] = useState(null);
-  
-  useEffect( () => {
-    const fetchData = async() => {
-      try{
-        const res = await fetch(apiUrl);
-        const output = await res.json();
-        //save data into variable
-        setCourses(output.data);
-        
-      }
-      catch(error){
-        toast.error("something went wrong")
-      }
-    }
-    fetchData();
+  const [loading, setLoading] = useState(true);
 
-  }, [] );
+  async function fetchData(){
+    setLoading(true);
+    try{
+      let response = await fetch(apiUrl);
+      let output = await response.json();
+
+      setCourses(output.data);
+
+    }
+    catch(error){
+      toast.error("Network issue");
+
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+  
+
+
+
 
 
   return (
-    <div>
-      <Navbar/>
+    <div className="flex flex-col min-h-screen">
+      <div>
+        <Navbar/>
+      </div>
+
+      <div className="bg-bgDark2">
+        <div>
+            <Filter filterData={filterData}/>
+        </div>
+          <div className="w-11/12 max-w-[1200px] mx-auto flex flex-wrap justify-center items-center min-h-[50vh]">
+              {
+                loading ? (<Spinner/>) : (<Cards courses={courses}/>)
+            }
+          </div>
+
+      </div>
 
 
-      <Filter 
-      filterData={filterData}
-      />
 
-
-      <Cards courses={courses}/>
     </div>
+
   );
 };
 
